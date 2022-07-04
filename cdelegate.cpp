@@ -58,6 +58,20 @@ QWidget *CDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &op
 
 void CDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
+    CUserData cell_data = qvariant_cast<CUserData>(index.data(Qt::EditRole));
+    if(TCell::TCELL_DOUBLE == cell_data.user_type()){
+        QDoubleSpinBox *doubleSpinbox = qobject_cast<QDoubleSpinBox*>(editor);
+        qDebug() << Q_FUNC_INFO << cell_data.toDouble();
+        doubleSpinbox->setValue(cell_data.toDouble());
+    }
+    else if(TCell::TCELL_BOOL == cell_data.user_type()){
+        QComboBox *comboBox = qobject_cast<QComboBox*>(editor);
+        comboBox->setCurrentIndex(cell_data.toBool() ? 0 : 1);
+    }
+    else if(TCell::TCELL_STR == cell_data.user_type()){
+        QLineEdit *lineedit = qobject_cast<QLineEdit*>(editor);
+        lineedit->setText(cell_data.toString());
+    }
 
 }
 
